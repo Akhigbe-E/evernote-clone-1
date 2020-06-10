@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+import Sidebar from './components/sidebar/Sidebar';
+import Editor from './components/editor/Editor';
 import './App.css';
 
 const firebase = require('firebase')
@@ -9,7 +12,8 @@ const App = () => {
     selectedNote: null,
     notes: null
   }
-  const [state, setstate] = useState(initialState)
+  const [{
+    selectedNoteIndex, selectedNote, notes }, setstate] = useState(initialState)
 
   useEffect(() => {
     firebase.firestore().collection('notes').onSnapshot(serverUpdate => {
@@ -21,14 +25,12 @@ const App = () => {
       console.log(notes)
       setstate({ notes })
     })
-    // return () => {
-    //   cleanup
-    // }
   }, [])
 
   return (
-    <div >
-      Hello World!
+    <div className="app-container">
+      <Sidebar selectedNoteIndex={selectedNoteIndex} notes={notes} />
+      <Editor />
     </div>
   );
 }
